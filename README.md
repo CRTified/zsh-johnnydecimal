@@ -10,6 +10,36 @@ More info can be found at https://johnnydecimal.com/
 	* If this is not set, it will default to `~/johnny`
   * `source johnnydecimal.zsh`
 
+### NixOS + Home-Manager
+
+Add the following to `programs.zsh.plugins`:
+
+``` nix
+{
+  name = "zsh-johnnydecimal";
+  file = "johnnydecimal.zsh";
+  src = pkgs.fetchFromGitHub {
+    owner = "Amarandus";
+    repo = "zsh-johnnydecimal";
+    rev = "5819ed9bfd3c5e6d2c9918fca475b09a80170f44";
+    sha256 = "0rprl3q62h574za5zz51j7v4vaf90pcyzskpm82vncdzbvsmy6lw";
+  };
+}
+```
+
+Merge the following with an already existing `home.sessionVariables`
+(or create a new one):
+
+``` nix
+
+home.sessionVariables = {
+  # Path to johnny.decimal basedir
+  "JOHNNYDECIMAL_BASE" = "~/johnny/";
+}
+```
+
+Don't forget to change the path.
+
 ## Functions
 
 ### `jcd`

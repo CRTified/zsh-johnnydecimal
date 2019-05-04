@@ -139,3 +139,20 @@ $ find $JOHNNYDECIMAL_BASE
 /tmp/jd/20-29 Administration/21 Company Registration
 /tmp/jd/10-19 Finance
 ```
+
+### Navigating
+
+``` shell
+$ pwd
+~/example
+$ jcd 22.02
+/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease ~/example
+$ ls
+'Security bond details.xlsx'  'Signed lease agreement.pdf'  'Terms & conditions.doc'
+$ pwd
+/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease
+$ popd
+~/example
+$ pwd
+~/example
+```

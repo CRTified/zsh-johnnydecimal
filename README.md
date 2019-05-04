@@ -3,16 +3,6 @@
 Collection of zsh functions to work with Johnny.Decimal document hierachies
 More info can be found at https://johnnydecimal.com/
 
-File Hiearchy example:
-```
-10-19 Area
-\-- 10 Category
-    \-- Object
-\-- 11 Category
-    \-- Object
-\-- 12 Category
-    \-- Object
-```
 
 ## Installation
 
@@ -25,24 +15,127 @@ File Hiearchy example:
 ### `jcd`
 
 ```
-jcd AREA.CATEGORY
+jcd CATEGORY.UNIQUE
 ```
 
-Changes the active directory to `AREA.CATEGORY` with `pushd`.
+Changes the active directory to `CATEGORY.UNIQUE` with `pushd`.
 Going back to the original directory can be done with `popd`.
 
 ### `jcp`
 
 ```
-jcd AREA.CATEGORY SRC [SRC [SRC ...]]
+jcd CATEGORY.UNIQUE SRC [SRC [SRC ...]]
 ```
 
-Copies `SRC` to `AREA.CATEGORY`.
+Copies `SRC` to `CATEGORY.UNIQUE`.
 
 ### `jmv`
 
 ```
-jcd AREA CAT SRC [SRC [SRC ...]]
+jcd CATEGORY.UNIQUE SRC [SRC [SRC ...]]
 ```
 
-Moves `SRC` to `AREA.CATEGORY`.
+Moves `SRC` to `CATEGORY.UNIQUE`.
+
+### `jmkarea`
+
+```
+jmkarea CATEGORY DESC
+```
+
+Creates the area for `CATEGORY`, using the given description.
+`CATEGORY` can be any index within the desired area.
+
+### `jmkcat`
+
+```
+jmkcat CATEGORY DESC
+```
+
+Creates the category `CATEGORY` with the given description.
+
+### `jmkuni`
+
+``` shell
+jmkuni CATEGORY.UNIQUE DESC
+```
+
+Creates the unique folder `CATEGORY.UNIQUE` with the given description.
+
+
+## Example
+
+### Setup of Example Environment
+``` shell
+$ export JOHNNYDECIMAL_BASE=/tmp/jd
+$ find $JOHNNYDECIMAL_BASE
+# Nothing here
+```
+
+### Hierachy creation
+
+``` shell
+$ jmkarea 10 Finance
+mkdir: created directory '/tmp/jd/10-19 Finance'
+
+$ jmkarea 20 Administration
+mkdir: created directory '/tmp/jd/20-29 Administration'
+
+$ jmkcat 21 "Company Registration"
+mkdir: created directory '/tmp/jd/20-29 Administration/21 Company Registration'
+
+$ jmkcat 22 Contracts
+mkdir: created directory '/tmp/jd/20-29 Administration/22 Contracts'
+
+$ jmkuni 22.01 "Cleaning contract"
+mkdir: created directory '/tmp/jd/20-29 Administration/22 Contracts/22.01 Cleaning contract'
+
+$ jmkuni 22.02 "Office Lease"
+mkdir: created directory '/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease'
+
+```
+
+The resulting file structure is
+
+``` shell
+$ find $JOHNNYDECIMAL_BASE
+/tmp/jd
+/tmp/jd/20-29 Administration
+/tmp/jd/20-29 Administration/22 Contracts
+/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease
+/tmp/jd/20-29 Administration/22 Contracts/22.01 Cleaning contract
+/tmp/jd/20-29 Administration/21 Company Registration
+/tmp/jd/10-19 Finance
+```
+
+### Adding Files
+
+``` shell
+$ pwd
+~/example
+$ ls
+'Security bond details.xlsx'  'Signed lease agreement.pdf'  'Terms & conditions.doc'
+
+$ jcp 22.02 Security\ bond\ details.xlsx Signed\ lease\ agreement.pdf
+'Security bond details.xlsx' -> '/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease/Security bond details.xlsx'
+'Signed lease agreement.pdf' -> '/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease/Signed lease agreement.pdf'
+
+$ jmv 22.02 Terms\ \&\ conditions.doc Signed\ lease\ agreement.pdf
+copied 'Terms & conditions.doc' -> '/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease/Terms & conditions.doc'
+removed 'Terms & conditions.doc'
+
+# Note that it only copied the first file - not the second one, as that already exists
+$ ls
+'Security bond details.xlsx'  'Signed lease agreement.pdf'
+$ find $JOHNNYDECIMAL_BASE
+/tmp/jd
+/tmp/jd/20-29 Administration
+/tmp/jd/20-29 Administration/22 Contracts
+/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease
+/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease/Terms & conditions.doc
+/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease/Signed lease agreement.pdf
+/tmp/jd/20-29 Administration/22 Contracts/22.02 Office Lease/Security bond details.xlsx
+/tmp/jd/20-29 Administration/22 Contracts/22.01 Cleaning contract
+/tmp/jd/20-29 Administration/21 Company Registration
+/tmp/jd/10-19 Finance
+```

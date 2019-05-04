@@ -10,113 +10,98 @@ fi;
 _johnny_fetchpath()
 {
     unset retval;
-    local targetpath=(${JOHNNYDECIMAL_BASE}/${1}\ */${1}.${2}\ *);
+    local targetpath=("${JOHNNYDECIMAL_BASE}/${_j_area} "*"/${_j_category} "*"/${_j_category}.${_j_unique} "*);
     retval=$(realpath ${targetpath});
 }
 
-_johnny_nextindex()
+_johnny_splitdecimal()
 {
-    unset retval;
-    if [ -f "${1}/.index" ];
-    then
-       local index=$(cat "${1}/.index");
-       local newindex=$(printf '%04u' $((1 + $index)));
-
-       fileCheck=$(find "${1}" -maxdepth 1 -name "$newindex *")
-       if [ -z "${fileCheck}" ];
-       then
-	   retval=$newindex;
-	   echo -n $retval > "${1}/.index"	   
-	   return 0;
-       fi;
-       echo "File with index ${newindex} already exists";
-       echo "Detecting new index";
-    fi;
+    _j_category=${1:0:2}
+    _j_unique=${1:3:2}
     
-    # We need to detect the new index
-    local maxindex=1;
-    for i in ${1}/*;
-    do
-	i=$(basename $i);
-	if [[ ${i:0:4} -ge maxindex ]];
-	then
-	    maxindex=${i:0:4};
-	fi;
-    done;
-    retval=$(printf '%04u' $((1 + $maxindex)));
-    echo -n $retval > "${1}/.index"
+    _j_area_lower=$(expr "(" ${_j_category} / 10 ")" "*" 10) 
+    _j_area_upper=$(($_j_area_lower + 9));
+    _j_area="${_j_area_lower}-${_j_area_upper}";
 }
-
 
 jcd()
 {
-    if [[ ! $# -eq 2 ]];
+    if [[ ! $# -eq 1 ]];
     then
 	echo "Usage:";
-	echo "$ jcd AREA CATEGORY"
+	echo "$ jcd CATEGORY.UNIQUE"
 	return;
     fi;
-    _johnny_fetchpath "${1}" "${2}";    
+    _johnny_splitdecimal "$1";
+    _johnny_fetchpath;
     pushd "${retval}";
 }
 
 jcp()
 {
-    if [[ $# -lt 3 ]];
+    if [[ $# -lt 2 ]];
     then
 	echo "Usage:";
-	echo "$ jcp AREA CATEGORY SRC"
+	echo "$ jcp CATEGORY.UNIQUE SRC"
 	return;
     fi;
-    _johnny_fetchpath "${1}" "${2}";
-    local targetpath=$retval;
-
-    for s in ${@:3};
-    do	
-	_johnny_nextindex $targetpath;
-	target="${targetpath}/${retval} $(basename ${s})";
-	cp --no-clobber --verbose --recursive "$s" "$target";
-    done;
+    _johnny_splitdecimal "$1";
+    _johnny_fetchpath;
+    cp --no-clobber --verbose --recursive "${@:2}" "$retval";
 }
 
 jmv()
 {
-    if [[ $# -lt 3 ]];
+    if [[ $# -lt 2 ]];
     then
 	echo "Usage:";
-	echo "$ jcp AREA CATEGORY SRC"
+	echo "$ jcp CATEGORY.UNIQUE SRC"
 	return;
     fi;
-    _johnny_fetchpath "${1}" "${2}";
-    local targetpath=$retval;
-
-    for s in ${@:3};
-    do	
-	_johnny_nextindex $targetpath;
-	target="${targetpath}/${retval} $(basename ${s})";
-	mv --no-clobber --verbose "$s" "$target";
-    done;
+    _johnny_splitdecimal "$1";
+    _johnny_fetchpath;
+    mv --no-clobber --verbose "${@:2}" "$retval";
 }
 
-jmkdir()
+
+jmkarea()
 {
-    if [[ $# -eq 2 ]];
+    if [[ ! $# -eq 2 ]];
     then
-	mkdir --verbose "${JOHNNYDECIMAL_BASE}/${1} ${2}";
-	return $?;
+	echo "Usage:";
+	echo "$ jmkarea CATEGORY DESC";
+	return;
     fi;
 
-    if [[ $# -eq 3 ]];
-    then
-	
-	local areapath=$(realpath ${JOHNNYDECIMAL_BASE}/${1}\ *);
-	mkdir --verbose "${areapath}/${2} ${3}";
-	return $?;
-    fi;
-
-    echo "Usage: ";
-    echo "$ jmkdir AREA DESCRIPTION"
-    echo "$ jmkdir AREA CATEGORY DESCRIPTION"
-    return 1;
+    _johnny_splitdecimal "${1}.00";
+    mkdir --verbose "${JOHNNYDECIMAL_BASE}/${_j_area} ${2}"
 }
 
+
+jmkcat()
+{
+    if [[ ! $# -eq 2 ]];
+    then
+	echo "Usage:";
+	echo "$ jmkcat CATEGORY DESC";
+	return;
+    fi;
+
+    _johnny_splitdecimal "$1";
+    local targetpath=("${JOHNNYDECIMAL_BASE}/${_j_area} "*);
+    mkdir --verbose "$targetpath/${_j_category} ${2}";
+}
+
+jmkuni()
+{
+    if [[ ! $# -eq 2 ]];
+    then
+	echo "Usage:";
+	echo "$ jmkuni CATEGORY.UNIQUE DESC";
+	return;
+    fi;
+
+    _johnny_splitdecimal "$1";
+    local targetpath=("${JOHNNYDECIMAL_BASE}/${_j_area} "*"/${_j_category} "*);
+    mkdir --verbose "$targetpath/${_j_category}.${_j_unique} ${2}"
+}

@@ -3,12 +3,29 @@
 Collection of zsh functions to work with Johnny.Decimal document hierachies
 More info can be found at https://johnnydecimal.com/
 
+File Hiearchy example:
+```
+10-19 Area
+\-- 10 Category
+    \-- Object
+\-- 11 Category
+    \-- Object
+\-- 12 Category
+    \-- Object
+```
+
+## Installation
+
+  * Set the environment variable `JOHNNYDECIMAL_BASE` to the base directory
+	* If this is not set, it will default to `~/johnny`
+  * `source johnnydecimal.zsh`
+
 ## Functions
 
 ### `jcd`
 
 ```
-jcd AREA CAT
+jcd AREA.CATEGORY
 ```
 
 Changes the active directory to `AREA.CATEGORY` with `pushd`.
@@ -17,10 +34,10 @@ Going back to the original directory can be done with `popd`.
 ### `jcp`
 
 ```
-jcd AREA CAT SRC [SRC [SRC ...]]
+jcd AREA.CATEGORY SRC [SRC [SRC ...]]
 ```
 
-Copies `SRC` to `AREA.CATEGORY`, adding the next index in front of the name.
+Copies `SRC` to `AREA.CATEGORY`.
 
 ### `jmv`
 
@@ -28,13 +45,4 @@ Copies `SRC` to `AREA.CATEGORY`, adding the next index in front of the name.
 jcd AREA CAT SRC [SRC [SRC ...]]
 ```
 
-Moves `SRC` to `AREA.CATEGORY`, adding the next index in front of the name.
-
-### `jmkdir`
-
-```
-jmkdir AREA DESC
-jmkdir AREA CAT DESC
-```
-
-Creates either `AREA` or `AREA.CAT` subfolders with the supplied (short) description.
+Moves `SRC` to `AREA.CATEGORY`.

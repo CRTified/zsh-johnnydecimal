@@ -105,3 +105,22 @@ jmkuni()
     local targetpath=("${JOHNNYDECIMAL_BASE}/${_j_area} "*"/${_j_category} "*);
     mkdir --verbose "$targetpath/${_j_category}.${_j_unique} ${2}"
 }
+
+
+jwd()
+{
+    if [[ $# -lt 2 ]];
+    then
+	echo "Usage:";
+	echo "$ jwd CATEGORY.UNIQUE CMD [ARG [ARG [ARG ...]]]"
+	return;
+    fi;
+    _johnny_splitdecimal "$1";
+    _johnny_fetchpath;
+    pushd "${retval}" > /dev/null;
+    echo "Directory: ${retval}";
+    ${2} "${@:3}";
+    local retval=$?;
+    popd > /dev/null;
+    return $retval;
+}

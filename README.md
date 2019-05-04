@@ -92,6 +92,13 @@ jmkuni CATEGORY.UNIQUE DESC
 
 Creates the unique folder `CATEGORY.UNIQUE` with the given description.
 
+### `jwd`
+
+``` shell
+jwd CATEGORY.UNIQUE CMD [ARG [ARG [ARG ...]]]
+```
+
+Executes `CMD [ARG [ARG [ARG ...]]]` inside the directory for `CATEGORY.UNIQUE`.
 
 ## Example
 

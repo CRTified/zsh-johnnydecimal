@@ -21,8 +21,8 @@ Add the following to `programs.zsh.plugins`:
   src = pkgs.fetchFromGitHub {
     owner = "Amarandus";
     repo = "zsh-johnnydecimal";
-    rev = "dc6043b496a8645187387fa58d8e7f5998481079";
-    sha256 = "1ldswhl1llji46f694r35nd0l8wsfyghx9c6f1hah6vhajkc4zb9";
+	rev = "38a8be63ec6492f404f2f73969315c8b328e6e19";
+	sha256 = "158pki4rrvbp4hi767bf04mbr4lsshgr10h8cy0589pa2li95x21";
   };
 }
 ```

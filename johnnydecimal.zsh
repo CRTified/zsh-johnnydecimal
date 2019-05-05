@@ -124,3 +124,38 @@ jwd()
     popd > /dev/null;
     return $retval;
 }
+
+_johnny_completeID()
+{
+    local state line;
+    typeset -A opt_args;
+
+    _arguments -C \
+	       '1: :->cats' \
+	       '*: :->args';
+
+    case "$state" in
+	(cats)
+	    for i in $JOHNNYDECIMAL_BASE/*/*;
+	    do
+		local jdidlist=();
+		local jddesclist=();
+		local category=$(basename "$i");
+		for j in "$i"/*; do
+		    local uniq=$(basename "$j");
+		    jdidlist+=("${uniq:0:5}");
+		    jddesclist+=("${uniq}");
+		done;
+		compadd -l -a -d jddesclist jdidlist;
+	    done;
+	    ;;
+	*)
+	    _files
+	    ;;
+    esac;
+}
+
+compdef _johnny_completeID jcd;
+compdef _johnny_completeID jcp;
+compdef _johnny_completeID jmv;
+compdef _johnny_completeID jwd;

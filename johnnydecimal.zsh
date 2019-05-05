@@ -146,7 +146,7 @@ _johnny_completeID()
 		    jdidlist+=("${uniq:0:5}");
 		    jddesclist+=("${uniq}");
 		done;
-		compadd -l -a -d jddesclist jdidlist;
+		compadd -l -a -J "$category" -X "$category" -d jddesclist jdidlist;
 	    done;
 	    ;;
 	*)

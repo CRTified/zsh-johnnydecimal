@@ -21,7 +21,7 @@ _johnny_splitdecimal()
     
     _j_area_lower=$(expr "(" ${_j_category} / 10 ")" "*" 10) 
     _j_area_upper=$(($_j_area_lower + 9));
-    _j_area="${_j_area_lower}-${_j_area_upper}";
+    _j_area="${(l:2::0:)_j_area_lower}-${(l:2::0:)_j_area_upper}";
 }
 
 jcd()

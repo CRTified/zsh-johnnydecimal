@@ -12,23 +12,16 @@ More info can be found at https://johnnydecimal.com/
 
 ### NixOS + Home-Manager
 
-Add the following to `programs.zsh.plugins`:
+Add the following input to your `flake.nix`:
 
 ``` nix
-{
-  name = "zsh-johnnydecimal";
-  file = "johnnydecimal.zsh";
-  src = pkgs.fetchFromGitHub {
-    owner = "Amarandus";
-    repo = "zsh-johnnydecimal";
-	rev = "2d66d4e3cfd4054b9c32c580ba256e823f0491e9";
-	sha256 = "1l9mjykahvfgs919534hp9h85msss6jniwr2160qfn0jgskx5x2w";
-  };
-}
+inputs = { 
+  zsh-johnnydecimal.url = "github:CRTified/zsh-johnnydecimal";
+};
 ```
 
-Merge the following with an already existing `home.sessionVariables`
-(or create a new one):
+Then, add `zsh-johnnydecimal.zshPlugin` to your home-manager 
+`programs.zsh.plugins` list and add the appropriate session variable, e.g.:
 
 ``` nix
 

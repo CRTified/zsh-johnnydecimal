@@ -20,18 +20,15 @@ inputs = {
 };
 ```
 
-Then, add `zsh-johnnydecimal.zshPlugin` to your home-manager 
-`programs.zsh.plugins` list and add the appropriate session variable, e.g.:
+Afterwards, you can either add `zsh-johnnydecimal.nixosModules.globalModule` to your
+global NixOS configuration, which makes `zsh-johnnydecimal` available for all 
+users configured with `home-manager`, or you add `zsh-johnnydecimal.nixosModules.hmModule`
+to the modules loaded by `home-manager`.
 
-``` nix
+In either case, users will have two options available:
 
-home.sessionVariables = {
-  # Path to johnny.decimal basedir
-  "JOHNNYDECIMAL_BASE" = "~/johnny/";
-}
-```
-
-Don't forget to change the path.
+ - `programs.zsh.johnnydecimal.enable` enables the J.D integration (default: `false`)
+ - `programs.zsh.johnnydecimal.basePath` configures the base path for your J.D file structure (default: `~/johnny/`)
 
 ## Functions
 

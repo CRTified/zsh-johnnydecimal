@@ -44,7 +44,7 @@ Going back to the original directory can be done with `popd`.
 ### `jcp`
 
 ```
-jcd CATEGORY.UNIQUE SRC [SRC [SRC ...]]
+jcp CATEGORY.UNIQUE SRC [SRC [SRC ...]]
 ```
 
 Copies `SRC` to `CATEGORY.UNIQUE`.
@@ -52,7 +52,7 @@ Copies `SRC` to `CATEGORY.UNIQUE`.
 ### `jmv`
 
 ```
-jcd CATEGORY.UNIQUE SRC [SRC [SRC ...]]
+jmv CATEGORY.UNIQUE SRC [SRC [SRC ...]]
 ```
 
 Moves `SRC` to `CATEGORY.UNIQUE`.
